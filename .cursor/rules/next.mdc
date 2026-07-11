@@ -15,6 +15,14 @@ Triggers:
   per session. Stop when the queue is empty or the cap is hit, then
   print every RESULT block from the session verbatim.
 
+Step 0, sync the lane (before selecting any WP, and again between WPs
+in drain mode):
+
+- If the working tree has uncommitted changes, stop and escalate.
+  Never stash, discard, or commit them.
+- git fetch origin --prune
+- git checkout the default branch, then git pull --rebase
+
 Per-WP procedure:
 
 1. Find the lowest-numbered file in dispatch/ with status: ready.
@@ -31,6 +39,7 @@ Hard rails, non-negotiable:
 
 - Work only on the WP's branch. Never commit to main. Never merge.
   Never force push. Never delete branches.
+- Never stash or discard local changes; escalate instead.
 - Touch only files inside the WP's stated scope, plus the WP file
   itself (status flips and RESULT block).
 - Never edit dispatch/README.md, other WP files, or any rules files.
