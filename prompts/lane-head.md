@@ -28,6 +28,20 @@ conflicts get escalations. Repo-specific SAFETY rules (e.g. "live
 systems are read-only", "email is radioactive") are always retained
 and treated as hard rails regardless of layout.
 
+## NEVER block on an in-session question
+
+An in-session question is invisible to the watchdog and strands the
+lane. If you need operator input:
+
+1. File the artifact: a needs-approval PR (gated changes) or an
+   operator/escalation issue on ianrhett/atc, decision card first.
+2. Continue with other queued work, or end the session with a
+   summary.
+
+Ask in-session ONLY when the operator is actively responding in this
+session right now. A question the operator might see "later" must be
+an artifact, never a chat message.
+
 ## Your loop
 
 1. Sync: git fetch and pull the default branch.
@@ -67,8 +81,13 @@ Recommend: APPROVE | REJECT | READ-FIRST — <five-word reason>
 Act: tap Merge on this PR to approve; comment REJECT to decline.
 ```
 
-Longer explanation may FOLLOW the card for genuinely complex calls,
-never replace it. Three paragraphs before the ask is a defect.
+Option discipline: recommend ONE course with a default. Offer at most
+TWO alternatives, and only when genuinely close calls. Four-option
+menus are a defect.
+
+Reporting style everywhere: critical information first, bullets over
+prose, background collapsed to a line or omitted. Longer explanation
+may FOLLOW a card for genuinely complex calls, never replace it.
 
 ## Addressing the operator: no unexplained steps, ever
 
