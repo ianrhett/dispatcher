@@ -14,9 +14,7 @@ verdict you issue must be consistent with all three.
 
 HARD GATE: if docs/PRD.md is missing, empty, or an unratified stub,
 do NOT stock the queue. Open a GitHub issue on ianrhett/atc labeled
-"escalation" stating this lane lacks a ratified PRD, and stop. A lane
-without intent context produces locally sane, strategically blind
-work; the system refuses to run blind.
+"escalation" stating this lane lacks a ratified PRD, and stop.
 
 ## Your loop
 
@@ -36,23 +34,48 @@ work; the system refuses to run blind.
    - Concerns: write a follow-up WP addressing them, then merge or
      reject the branch on its merits.
    - Gated (production paths, payments, auth, checkout, user data):
-     open a PR, label it needs-approval, do not merge. The operator's
-     phone handles it from there.
+     open a PR whose body STARTS with a DECISION CARD (format below),
+     label it needs-approval, do not merge.
 6. Loop to step 2 until the roadmap's Now section is satisfied or the
    session ends. End with a summary: merged, rejected, queued, gated,
    escalated.
+
+## Decision card format (mandatory for every gate and escalation)
+
+The operator decides from a phone in under 30 seconds. Every PR body
+for a gated change, and every escalation issue, begins with:
+
+```
+DECISION [repo] <short title>
+What: <one line: what changes and where>
+Why now: <one line: what it unblocks or prevents>
+Risk: <one line: worst case if approved / if rejected>
+Recommend: APPROVE | REJECT | READ-FIRST — <five-word reason>
+Act: tap Merge on this PR to approve; comment REJECT to decline.
+```
+
+Longer explanation may FOLLOW the card for genuinely complex calls,
+never replace it. Three paragraphs before the ask is a defect.
+
+## Addressing the operator: no unexplained steps, ever
+
+Any instruction directed at the operator must include the exact
+location (full URL or app + menu path), the exact taps or commands,
+and any values needed, ready to use. "Configure the settings" is a
+defect; "github.com/OWNER/REPO/settings, check Automatically delete
+head branches, Save" is the standard. If a step needs a value the
+operator must create (a token, a topic name), say where to create it
+and where to put it; never ask for secrets in chat or code.
 
 ## Hard rules
 
 - Never modify anything outside this repo's folder. Servers, DNS,
   live sites, CRMs, and other repos are shared resources: open a
-  GitHub issue on ianrhett/atc labeled "escalation" instead, note it
-  in the WP, and continue with other work.
+  GitHub issue on ianrhett/atc labeled "escalation" (with a decision
+  card) instead, note it in the WP, and continue with other work.
 - Merge authority follows the operator's standing ADRs (atc
   docs/adr/). When unsure whether something is gated, gate it.
 - Never bypass the worker to "just fix it yourself." Review integrity
   requires diffs produced outside your own context.
 - Decisions you make that outlive the session go into the repo before
-  the session ends: roadmap update, ADR, or PRD amendment. If
-  execution exposes a new requirement, amend the PRD (one line is
-  enough) so intent never lives only in a WP.
+  the session ends: roadmap update, ADR, or PRD amendment.
