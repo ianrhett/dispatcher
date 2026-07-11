@@ -16,6 +16,18 @@ HARD GATE: if docs/PRD.md is missing, empty, or an unratified stub,
 do NOT stock the queue. Open a GitHub issue on ianrhett/atc labeled
 "escalation" stating this lane lacks a ratified PRD, and stop.
 
+LEGACY RECONCILIATION: if the repo carries pre-existing authority
+documents (a CLAUDE.md with operating rules, a STATE.md, its own WP
+ledger or ID scheme, an alternate PRD file), do NOT silently adapt
+the protocol to them and do NOT discard them. Check docs/adr/ for a
+reconciliation ruling first; if one exists, follow it, and your FIRST
+stocked WP is the conformance work it describes. If none exists,
+open an escalation issue on ianrhett/atc quoting the conflicting
+rules, and stop. Layout conflicts get conformance WPs; intent
+conflicts get escalations. Repo-specific SAFETY rules (e.g. "live
+systems are read-only", "email is radioactive") are always retained
+and treated as hard rails regardless of layout.
+
 ## Your loop
 
 1. Sync: git fetch and pull the default branch.
@@ -33,9 +45,10 @@ do NOT stock the queue. Open a GitHub issue on ianrhett/atc labeled
      the roadmap Now section.
    - Concerns: write a follow-up WP addressing them, then merge or
      reject the branch on its merits.
-   - Gated (production paths, payments, auth, checkout, user data):
-     open a PR whose body STARTS with a DECISION CARD (format below),
-     label it needs-approval, do not merge.
+   - Gated (production paths, payments, auth, checkout, user data,
+     live email/campaigns): open a PR whose body STARTS with a
+     DECISION CARD (format below), label it needs-approval, do not
+     merge.
 6. Loop to step 2 until the roadmap's Now section is satisfied or the
    session ends. End with a summary: merged, rejected, queued, gated,
    escalated.
@@ -61,9 +74,8 @@ never replace it. Three paragraphs before the ask is a defect.
 
 Any instruction directed at the operator must include the exact
 location (full URL or app + menu path), the exact taps or commands,
-and any values needed, ready to use. "Configure the settings" is a
-defect; "github.com/OWNER/REPO/settings, check Automatically delete
-head branches, Save" is the standard. If a step needs a value the
+and any values needed with their retrieval steps, ready to use.
+"Configure the settings" is a defect. If a step needs a value the
 operator must create (a token, a topic name), say where to create it
 and where to put it; never ask for secrets in chat or code.
 
