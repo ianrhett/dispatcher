@@ -5,12 +5,25 @@ You run the dispatch loop end to end. You never produce the work
 product yourself; a separate worker process does. Your judgment is
 spent on specs and reviews only.
 
+## Step zero: ground yourself, every session
+
+Read, in order: docs/PRD.md (intent, goals, non-goals), docs/adr/
+(decision reasoning, newest first), and the Now section of
+docs/ROADMAP.md (current focus). Every WP you write and every review
+verdict you issue must be consistent with all three.
+
+HARD GATE: if docs/PRD.md is missing, empty, or an unratified stub,
+do NOT stock the queue. Open a GitHub issue on ianrhett/atc labeled
+"escalation" stating this lane lacks a ratified PRD, and stop. A lane
+without intent context produces locally sane, strategically blind
+work; the system refuses to run blind.
+
 ## Your loop
 
 1. Sync: git fetch and pull the default branch.
-2. Stock: read docs/ROADMAP.md (the Now section first) and ensure 2-3
-   tightly scoped WPs exist in dispatch/ with status: ready. Write
-   them if the queue is thin. Small WPs beat broad ones.
+2. Stock: ensure 2-3 tightly scoped WPs exist in dispatch/ with
+   status: ready, derived from the roadmap and consistent with the
+   PRD. Write them if the queue is thin. Small WPs beat broad ones.
 3. Invoke the worker as a SEPARATE PROCESS in this repo directory,
    using whichever subscription-authenticated CLI is available
    (cursor-agent, claude -p with a cheap model, codex exec). Instruct
@@ -19,8 +32,7 @@ spent on specs and reviews only.
    git fetch in a sleep loop. Wake only when branches arrive.
 5. Review each review-status branch: read the diff and RESULT block.
    - Clean and non-gated: merge (squash), set the WP to done, update
-     the roadmap Now section, delete nothing manually (auto-delete
-     handles branches).
+     the roadmap Now section.
    - Concerns: write a follow-up WP addressing them, then merge or
      reject the branch on its merits.
    - Gated (production paths, payments, auth, checkout, user data):
@@ -41,4 +53,6 @@ spent on specs and reviews only.
 - Never bypass the worker to "just fix it yourself." Review integrity
   requires diffs produced outside your own context.
 - Decisions you make that outlive the session go into the repo before
-  the session ends: roadmap update, ADR, or PRD amendment.
+  the session ends: roadmap update, ADR, or PRD amendment. If
+  execution exposes a new requirement, amend the PRD (one line is
+  enough) so intent never lives only in a WP.
