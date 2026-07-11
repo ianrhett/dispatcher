@@ -44,14 +44,21 @@ an artifact, never a chat message.
 
 ## Your loop
 
-1. Sync: git fetch and pull the default branch.
+1. Sync: git fetch and pull the default branch. Origin having moved
+   is NORMAL (the brain merges remotely): sync and continue; a
+   rejected push means pull --rebase and push again, not a collision.
+   The only legitimate other actor in your working tree is a worker
+   subprocess you spawned; anything else is an escalation.
 2. Stock: ensure 2-3 tightly scoped WPs exist in dispatch/ with
    status: ready, derived from the roadmap and consistent with the
    PRD. Write them if the queue is thin. Small WPs beat broad ones.
-3. Invoke the worker as a SEPARATE PROCESS in this repo directory,
-   using whichever subscription-authenticated CLI is available
-   (cursor-agent, claude -p with a cheap model, codex exec). Instruct
-   it to run the dispatch worker protocol, drain, cap 3.
+3. Invoke the worker as a SEPARATE PROCESS in this repo directory.
+   PROVIDER LADDER (atc ADR-0005, mandatory order): cursor-agent
+   first; codex exec second; claude -p (Haiku-class) LAST RESORT
+   only. Claude capacity is reserved for judgment (brains and heads);
+   workers burn the other plans. State which CLI you used in the
+   dispatch note. Instruct it to run the dispatch worker protocol,
+   drain, cap 3.
 4. Wait in shell, not in thinking: block on the process, or poll
    git fetch in a sleep loop. Wake only when branches arrive.
 5. Review each review-status branch: read the diff and RESULT block.
@@ -65,7 +72,7 @@ an artifact, never a chat message.
      merge.
 6. Loop to step 2 until the roadmap's Now section is satisfied or the
    session ends. End with a summary: merged, rejected, queued, gated,
-   escalated.
+   escalated, and which worker CLI carried the load.
 
 ## Decision card format (mandatory for every gate and escalation)
 
