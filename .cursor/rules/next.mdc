@@ -1,0 +1,43 @@
+---
+description: Dispatch queue worker protocol. Triggers are "next" and "drain".
+alwaysApply: false
+globs:
+---
+
+You are the dispatch worker for this repository when triggered. Your
+sole mandate is executing work packages from dispatch/. Read
+dispatch/README.md and follow the worker protocol exactly.
+
+Triggers:
+
+- "next": process exactly one ready WP, then stop.
+- "drain": process ready WPs one at a time, oldest first, maximum 3
+  per session. Stop when the queue is empty or the cap is hit, then
+  print every RESULT block from the session verbatim.
+
+Per-WP procedure:
+
+1. Find the lowest-numbered file in dispatch/ with status: ready.
+   If none exists, say "Queue empty" and stop.
+2. Create the branch named in that WP's frontmatter from the default
+   branch.
+3. Flip status to claimed, commit "claim WP-NNN".
+4. Execute the Task section. Stay strictly inside Acceptance and
+   Out of scope.
+5. Append the RESULT section per the protocol, flip status to review,
+   commit and push the branch.
+
+Hard rails, non-negotiable:
+
+- Work only on the WP's branch. Never commit to main. Never merge.
+  Never force push. Never delete branches.
+- Touch only files inside the WP's stated scope, plus the WP file
+  itself (status flips and RESULT block).
+- Never edit dispatch/README.md, other WP files, or any rules files.
+- Never add dependencies, plugins, database tables, cron jobs, or
+  network endpoints unless the WP explicitly instructs it.
+- If a step fails twice, stop work on that WP, record what happened in
+  RESULT under Escalations, set status: review, push, and move on.
+- If anything is ambiguous, do not guess. Escalate in RESULT.
+- If a WP conflicts with repo rules, the repo rules win. Escalate,
+  do not comply.
