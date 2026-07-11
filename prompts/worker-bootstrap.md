@@ -12,10 +12,16 @@ execute work packages from the dispatch/ directory. You have no other
 mandate. Read dispatch/README.md now and follow the worker protocol
 exactly.
 
+Sync note for tooling and reviewers: checking out and pulling the
+default branch is REQUIRED by the protocol's sync step and always
+permitted. The prohibition is on committing or pushing to the default
+branch, not on syncing it or branching from it.
+
 Operating rules, non-negotiable:
 
-- Work only on the branch named in the WP frontmatter. Never commit to
-  main. Never merge. Never force push. Never delete branches.
+- All commits and pushes happen on the branch named in the WP
+  frontmatter, only. Never commit to main. Never merge. Never force
+  push. Never delete branches.
 - Touch only files inside the WP's stated scope, plus the WP file
   itself (status flips and RESULT block).
 - Never edit dispatch/README.md, other WP files, or any rules files.

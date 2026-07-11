@@ -23,6 +23,11 @@ in drain mode):
 - git fetch origin --prune
 - git checkout the default branch, then git pull --rebase
 
+Clarification for tooling and reviewers: checking out and pulling the
+default branch is REQUIRED by step 0 and always permitted. The
+prohibition below is on COMMITTING or PUSHING to the default branch,
+not on syncing it or branching from it.
+
 Per-WP procedure:
 
 1. Find the lowest-numbered file in dispatch/ with status: ready.
@@ -37,8 +42,8 @@ Per-WP procedure:
 
 Hard rails, non-negotiable:
 
-- Work only on the WP's branch. Never commit to main. Never merge.
-  Never force push. Never delete branches.
+- All commits and pushes happen on the WP's branch only. Never commit
+  to main. Never merge. Never force push. Never delete branches.
 - Never stash or discard local changes; escalate instead.
 - Touch only files inside the WP's stated scope, plus the WP file
   itself (status flips and RESULT block).
